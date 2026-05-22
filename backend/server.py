@@ -6,7 +6,7 @@ from api import VoiceAssistant
 from livekit.plugins import google
 from livekit.agents import AgentSession, AutoSubscribe, JobContext, WorkerOptions, Worker
 from dotenv import load_dotenv
-import asyncio
+import sys
 
 
 
@@ -21,13 +21,10 @@ def health():
     return {"status": "voice assistant running"}, 200
 
 def run_agent():
+    sys.argv = ["agent.py", "start"]
     from agent import enterypoint  # import your entrypoint function
-    async def start():
-        worker = Worker(WorkerOptions(entrypoint_fnc=enterypoint))
-        await worker.run()
-
-    asyncio.run(start())
-
+    cli.run_app(WorkerOptions(entrypoint_fnc=enterypoint))
+    
 # Start the LiveKit agent worker in a background thread
 agent_thread = threading.Thread(target=run_agent, daemon=True)
 agent_thread.start()
