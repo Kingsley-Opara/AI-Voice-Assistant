@@ -4,8 +4,10 @@ from flask import Flask
 from livekit.agents import WorkerOptions, cli
 from api import VoiceAssistant
 from livekit.plugins import google
-from livekit.agents import AgentSession, AutoSubscribe, JobContext
+from livekit.agents import AgentSession, AutoSubscribe, JobContext, WorkerOptions, Worker
 from dotenv import load_dotenv
+import asyncio
+
 
 
 load_dotenv()
@@ -20,7 +22,11 @@ def health():
 
 def run_agent():
     from agent import enterypoint  # import your entrypoint function
-    cli.run_app(WorkerOptions(entrypoint_fnc=enterypoint))
+    async def start():
+        worker = Worker(WorkerOptions(entrypoint_fnc=enterypoint))
+        await worker.run()
+
+    asyncio.run(start())
 
 # Start the LiveKit agent worker in a background thread
 agent_thread = threading.Thread(target=run_agent, daemon=True)
