@@ -1,17 +1,21 @@
-FROM python:3.10.0-slim
-
-COPY . /app
+FROM python:3.10-slim
 
 WORKDIR /app
 
-RUN python -m venv /opt/venv
+RUN apt-get update && apt-get install -y \
+    portaudio19-dev \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN /opt/venv/bin/pip install pip --upgrade && \ 
-    /opt/venv/bin/pip install -r requirements.txt --upgrade
+COPY requirements.txt .
 
-# RUN chmod +x entrypoint.sh &&
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install -r requirements.txt
+
+COPY . .
 
 EXPOSE 8080
 
-
-CMD ["/opt/venv/bin/python", "agent.py", "console"]
+CMD ["/opt/venv/bin/python", "app/agent.py", "start"]
