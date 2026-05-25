@@ -14,4 +14,4 @@ RUN /opt/venv/bin/pip install pip --upgrade && \
 EXPOSE 8080
 
 
-CMD ["/opt/venv/bin/python", "./app/agent.py", "console"]
+CMD ["/opt/venv/bin/python", "agent.py", "console"]
