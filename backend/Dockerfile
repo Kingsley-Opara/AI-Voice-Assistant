@@ -18,4 +18,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["/opt/venv/bin/python", "app/agent.py", "start"]
+CMD ["/opt/venv/bin/python", "agent.py", "start"]
